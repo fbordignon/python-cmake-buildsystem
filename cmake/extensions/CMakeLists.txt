@@ -759,6 +759,7 @@ add_python_extension(_tkinter
     INCLUDEDIRS ${_tkinter_INCLUDEDIRS}
 )
 if(NOT USE_BUILTIN_ZLIB)
+    message(WARNING ZLIB_LIBRARIES ZLIB_INCLUDE_DIRS)
     add_python_extension(zlib
         REQUIRES ZLIB_LIBRARIES ZLIB_INCLUDE_DIRS
         SOURCES zlibmodule.c

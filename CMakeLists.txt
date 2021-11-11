@@ -109,12 +109,8 @@ endmacro()
 option(USE_SYSTEM_LIBRARIES "Use system libraries" ON)
 
 # Set platform dependent defaults
-set(_use_builtin_zlib_default OFF)
-set(_use_system_zlib_default ON)
-if(WIN32 AND "${PY_VERSION}" VERSION_LESS "3.7.0")
-  set(_use_builtin_zlib_default ON)
-  set(_use_system_zlib_default OFF)
-endif()
+set(_use_builtin_zlib_default ON)
+set(_use_system_zlib_default OFF)
 
 cmake_dependent_option(USE_SYSTEM_BZip2 "Use system BZip2" ON "USE_SYSTEM_LIBRARIES" OFF)
 cmake_dependent_option(USE_SYSTEM_Curses "Use system Curses" ON "USE_SYSTEM_LIBRARIES" OFF)
@@ -130,7 +126,7 @@ if(IS_PY3)
   cmake_dependent_option(USE_SYSTEM_LIBMPDEC "Use system LIBMPDEC" ON "USE_SYSTEM_LIBRARIES" OFF)
 endif()
 
-cmake_dependent_option(USE_BUILTIN_ZLIB "Use builtin ZLIB" ${_use_builtin_zlib_default} "NOT USE_SYSTEM_ZLIB" OFF)
+cmake_dependent_option(USE_BUILTIN_ZLIB "Use builtin ZLIB" ${_use_builtin_zlib_default} "NOT USE_SYSTEM_ZLIB" ON)
 
 cmake_dependent_option(USE_LIBEDIT "Use libedit instead of readline" OFF
                        "USE_SYSTEM_READLINE" OFF)
