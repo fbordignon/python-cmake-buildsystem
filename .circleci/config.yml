@@ -59,7 +59,6 @@ jobs:
           command: |
             New-Item -ItemType Directory ../build
             New-Item -ItemType Directory ../install
-            ls
       - run:
           name: Install dependencies
           command: |
@@ -80,7 +79,7 @@ jobs:
       - run:
           name: Run Tests
           command: |
-            cd ~/project/install/bin
+            cd ~/project/install/Scripts
             .\python.exe -m test
 
 workflows:
