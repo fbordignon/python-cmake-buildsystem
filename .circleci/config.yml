@@ -83,13 +83,13 @@ jobs:
             .\python.exe -m test
 
 workflows:
-#     build-and-test:
-#       jobs:
-#         # 3.9.8
-#         - build-test-python:
-#             name: python-3.9.8-x64
-#             python_version: 3.9.8
-#             python_arch: x64
+    build-and-test:
+      jobs:
+        # 3.9.8
+        - build-test-python:
+            name: python-3.9.8-x64
+            python_version: 3.9.8
+            python_arch: x64
     
     build-and-test-win:
       jobs:
