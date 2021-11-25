@@ -34,6 +34,13 @@ jobs:
            PY_VERSION: << parameters.python_version >>
 
   build-test-python-win:
+    parameters:
+      python_version:
+        description: "Python version specified as X.Y.Z"
+        type: string
+      python_arch:
+        description: "Python arch specified as x64 of x86"
+        type: string
     executor:
       name: win/default
       shell: powershell.exe
