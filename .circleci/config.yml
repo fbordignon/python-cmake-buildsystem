@@ -47,6 +47,7 @@ jobs:
     executor:
       name: win/default
       shell: powershell.exe
+    working_directory: ~/project/src
     environment:
       - MSBUILD_DIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin'
       - CMAKE_DIR: 'C:\Program Files\CMake\bin'
@@ -56,8 +57,8 @@ jobs:
       - run:
           name: Set up workspace
           command: |
-            New-Item -ItemType Directory build
-            New-Item -ItemType Directory install
+            New-Item -ItemType Directory ../build
+            New-Item -ItemType Directory ../install
             ls
       - run:
           name: Install dependencies
@@ -68,8 +69,9 @@ jobs:
           name: Build Python for Windows
           command: |
             $Env:PATH += ";$Env:CMAKE_DIR;$Env:MSBUILD_DIR"
-            cd build
-            cmake -G "Visual Studio 16 2019" -A "x64" -DCMAKE_INSTALL_PREFIX=../install .
+            pwd
+            cd ../build
+            cmake -G "Visual Studio 16 2019" -A "x64" -DCMAKE_INSTALL_PREFIX=~/project/install ~/project/src
             if (-not $?) { throw "Failed to configure Python" }
             cmake --build . --config Release -- /m
             if (-not $?) { throw "Failed to build Python" }
@@ -78,7 +80,7 @@ jobs:
       - run:
           name: Run Tests
           command: |
-            cd ../install/bin
+            cd ~/project/install/bin
             .\python.exe -m test
 
 workflows:
