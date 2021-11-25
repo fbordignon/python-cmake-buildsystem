@@ -51,7 +51,7 @@ jobs:
       - MSBUILD_DIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin'
       - CMAKE_DIR: 'C:\Program Files\CMake\bin'
     steps:
-      - checkout path: python-cmake-buildsystem
+      - checkout python-cmake-buildsystem
 
       - run:
           name: Set up workspace
