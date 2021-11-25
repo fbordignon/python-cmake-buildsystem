@@ -51,8 +51,7 @@ jobs:
       - MSBUILD_DIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin'
       - CMAKE_DIR: 'C:\Program Files\CMake\bin'
     steps:
-      - checkout:
-        path: python-cmake-buildsystem
+      - checkout
 
       - run:
           name: Set up workspace
@@ -70,7 +69,7 @@ jobs:
           command: |
             $Env:PATH += ";$Env:CMAKE_DIR;$Env:MSBUILD_DIR"
             cd build
-            cmake -G "Visual Studio 16 2019" -A "x64" -DCMAKE_INSTALL_PREFIX=../install ../python-cmake-buildsystem
+            cmake -G "Visual Studio 16 2019" -A "x64" -DCMAKE_INSTALL_PREFIX=../install .
             if (-not $?) { throw "Failed to configure Python" }
             cmake --build . --config Release -- /m
             if (-not $?) { throw "Failed to build Python" }
