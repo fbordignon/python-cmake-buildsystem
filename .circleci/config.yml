@@ -33,13 +33,63 @@ jobs:
          environment:
            PY_VERSION: << parameters.python_version >>
 
+  build-test-python-win:
+    executor:
+      name: win/default
+      shell: powershell.exe
+    environment:
+      - PY_BUILD_DIR: 'C:\tmp\py'
+      - MSBUILD_DIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin'
+      - CMAKE_DIR: 'C:\Program Files\CMake\bin'
+    steps:
+      - checkout
+
+      - run:
+          name: Set up workspace
+          command: |
+            New-Item -ItemType Directory $Env:PY_BUILD_DIR\src
+            New-Item -ItemType Directory $Env:PY_BUILD_DIR\build
+            New-Item -ItemType Directory $Env:PY_BUILD_DIR\install
+      - run:
+          name: Install dependencies
+          command: |
+            choco install --no-progress cmake
+            if (-not $?) { throw "Failed to install CMake" }
+      - run:
+          name: Assemble Windows runtime dependencies
+          command: |
+            cd $Env:PY_BUILD_DIR\src
+      - run:
+          name: Build Python for Windows
+          command: |
+            $Env:PATH += ";$Env:CMAKE_DIR;$Env:MSBUILD_DIR"
+            cd $Env:PY_BUILD_DIR\build
+            cmake -G "Visual Studio 17 2019 Win64" -DCMAKE_INSTALL_PREFIX:$Env:PY_BUILD_DIR\install $Env:PY_BUILD_DIR\src
+            if (-not $?) { throw "Failed to configure Python" }
+            cmake --build . --config Release -- /m
+            if (-not $?) { throw "Failed to build Python" }
+            cmake --build . --config Release --target INSTALL
+            if (-not $?) { throw "Failed to install Python" }
+      - run:
+          name: Run Tests
+          command: |
+            cd $Env:PY_BUILD_DIR\install\bin
+            .\python.exe -m test
+
 workflows:
-    build-and-test:
+#     build-and-test:
+#       jobs:
+#         # 3.9.8
+#         - build-test-python:
+#             name: python-3.9.8-x64
+#             python_version: 3.9.8
+#             python_arch: x64
+    
+    build-and-test-win:
       jobs:
-        # 3.6.4
-        - build-test-python:
+        # 3.9.8
+        - build-test-python-win:
             name: python-3.9.8-x64
             python_version: 3.9.8
             python_arch: x64
-
 
